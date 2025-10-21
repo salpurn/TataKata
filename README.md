@@ -25,15 +25,7 @@ Website ini dirancang agar mudah digunakan. Mahasiswa cukup mendaftar dan login 
 5. Jalankan command ```php artisan key:generate``` untuk enkripsi data.
 6. Jalankan command ```php artisan migrate:fresh --seed``` untuk ekspor database ```mysql``` ke sistem backend.
 7. Jalankan command ```php artisan storage:link``` untuk menyimpan dokumen.
-8. Jalankan command ```php artisan serve``` untuk mengakses database ```Laravel``` di localhost browser (http://127.0.0.1:8000/).
-
-di terminal 1: php artisan serve
-di terminal 2: php artisan queue:work --tries=3 --timeout=300
-di terminal 3: npm run dev
-
-- FastAPI
-1. Jalankan command ```cd FastAPI``` untuk mengakses repositori ```FastAPI```.
-2. Jalankan instalasi library python dengan command ```python3 -m pip install fastapi uvicorn python-multipart pydantic mysql-connector-python torch transformers google-genai pymupdf```. Jika Anda menggunakan virtual environment, jalankan ```python3 -m venv .venv``` dan ```source .venv/bin/activate```.
-3. Jalankan command ```uvicorn app.main:app --host 127.0.0.1 --port 5000``` untuk mangakses database ```FastAPI``` di localhost browser (http://127.0.0.1:5000/docs).
-
-Untuk efisiensi waktu, jalankan ```config-setup.sh``` pada root dengan run command ```bash config-setup.sh``` pada terminal Linux.
+8. Sediakan 3 terminal untuk run program.
+9. Jalankan command ```npm run dev``` pada terminal 1 untuk compile aset frontend ke ```Laravel```.
+10. Jalankan command ```php artisan serve``` pada terminal 2 untuk mengakses database ```Laravel``` di localhost browser (http://127.0.0.1:8000/).
+11. Jalankan command `php artisan queue:work --tries=3 --timeout=300` pada terminal 3 untuk AI processing.
