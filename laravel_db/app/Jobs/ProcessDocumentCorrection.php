@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Smalot\PdfParser\Parser;
 
+
 class ProcessDocumentCorrection implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
@@ -76,30 +77,46 @@ class ProcessDocumentCorrection implements ShouldQueue
             $url = "https://generativelanguage.googleapis.com/v1beta/models/{$modelName}:generateContent?key=" . $apiKey;
             $timeoutDuration = 0; // Mengandalkan timeout Job Laravel (300s)
 
-            // Pastikan $text adalah string UTF-8 yang bersih
-            $response = Http::timeout($timeoutDuration)->post($url, [
-                'contents' => [
-                    [
-                        'parts' => [
-                            ['text' => "Perbaiki tata bahasa dan ejaan dalam bahasa Indonesia tanpa mengubah makna berikut:\n\n" . $text]
+            // 🔹 Batas panjang per chunk (Gemini biasanya aman di < 7000 karakter)
+            $maxLength = 7000;
+            $chunks = str_split($text, $maxLength);
+
+            $correctedChunks = [];
+
+            foreach ($chunks as $index => $chunk) {
+                \Log::info("🟦 Sending chunk " . ($index + 1) . "/" . count($chunks) . " to Gemini...");
+
+                $response = Http::timeout($timeoutDuration)->post($url, [
+                    'contents' => [
+                        [
+                            'parts' => [
+                                ['text' => "Perbaiki tata bahasa dan ejaan dalam bahasa Indonesia tanpa mengubah makna berikut:\n\n" . $chunk]
+                            ]
                         ]
                     ]
-                ]
-            ]);
+                ]);
 
-            $data = $response->json();
-            
-            if (isset($data['candidates'][0]['content']['parts'][0]['text'])) {
-                return $data['candidates'][0]['content']['parts'][0]['text'];
+                $data = $response->json();
+
+                if (isset($data['candidates'][0]['content']['parts'][0]['text'])) {
+                    $correctedText = $data['candidates'][0]['content']['parts'][0]['text'];
+                    $correctedChunks[] = trim($correctedText);
+                } else {
+                    $errorMessage = $data['error']['message'] 
+                        ?? ($data['candidates'][0]['finishReason'] ?? 'Tidak ada teks hasil koreksi dari Gemini.');
+                    \Log::error("Gemini API Error (Chunk {$index}): " . $errorMessage);
+                    $correctedChunks[] = "[GAGAL KOREKSI BAGIAN {$index}]";
+                }
+
+                // Optional: delay kecil biar API nggak overload
+                sleep(2);
             }
 
-            $errorMessage = $data['error']['message'] ?? 
-                            ($data['candidates'][0]['finishReason'] ?? 'Gagal mendapatkan hasil koreksi dari Gemini API.');
-            Log::error('Gemini API Error (Job): ' . $errorMessage);
-            return "ERROR: " . $errorMessage; 
+            // Gabungkan semua hasil jadi satu teks
+            return implode("\n\n", $correctedChunks);
 
         } catch (\Exception $e) {
-            Log::error('Gemini Request Exception (Job): ' . $e->getMessage());
+            \Log::error('Gemini Request Exception (Job): ' . $e->getMessage());
             return "ERROR: " . $e->getMessage();
         }
     }
