@@ -2,11 +2,10 @@
 builder = "NIXPACKS"
 
 [start]
-cmd = "php artisan serve --host=0.0.0.0 --port=$PORT"
-
-cmd = "php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=$PORT"
+cmd = "php artisan migrate --force && php -S 0.0.0.0:$PORT -t public"
 
 [env]
-APP_ENV = "production"
-APP_DEBUG = "false"
+APP_KEY = "base64:x/99Vv0/XpSG12OzNf/lkAhfox8beLpWRKj5fsN6qFA="
 APP_URL = "https://tatakata.up.railway.app"
+APP_DEBUG = "false"
+APP_ENV = "production"
