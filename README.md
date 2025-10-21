@@ -18,14 +18,13 @@ Website ini dirancang agar mudah digunakan. Mahasiswa cukup mendaftar dan login 
 
 ### How to Run
 - Laravel
-1. Jalankan command ```cd laravel_db``` untuk mengakses repositori ```Laravel```.
-2. Jalankan instalasi ```composer install``` untuk backend dan ```npm install``` ```npm run build``` untuk frontend.
-3. Jalankan command ```npm run dev``` untuk compile aset frontend ke ```Laravel```.
-4. Copy konfigurasi ```.env``` dengan command ```cp -n .env.example .env``` untuk Linux/macOS dan ```Copy-Item .env.example .env``` untuk Windows.
-5. Jalankan command ```php artisan key:generate``` untuk enkripsi data.
-6. Jalankan command ```php artisan migrate:fresh --seed``` untuk ekspor database ```mysql``` ke sistem backend.
-7. Jalankan command ```php artisan storage:link``` untuk menyimpan dokumen.
-8. Sediakan 3 terminal untuk run program.
-9. Jalankan command ```npm run dev``` pada terminal 1 untuk compile aset frontend ke ```Laravel```.
-10. Jalankan command ```php artisan serve``` pada terminal 2 untuk mengakses database ```Laravel``` di localhost browser (http://127.0.0.1:8000/).
-11. Jalankan command `php artisan queue:work --tries=3 --timeout=300` pada terminal 3 untuk AI processing.
+1. Jalankan command `cd laravel_db` untuk mengakses repositori **Laravel**.
+2. Jalankan instalasi `composer install` untuk backend dan `npm install` `npm run build` untuk frontend.
+3. Copy konfigurasi **.env** dengan command `cp -n .env.example .env` untuk Linux/macOS dan `Copy-Item .env.example .env` untuk Windows.
+4. Jalankan command `php artisan key:generate` untuk enkripsi data.
+5. Jalankan command `php artisan migrate:fresh --seed` untuk ekspor database **mysql** ke sistem backend.
+6. Jalankan command `php artisan storage:link` untuk menyimpan dokumen.
+7. Sediakan 3 terminal untuk run program pada folder **Laravel**.
+8. Jalankan command `npm run dev` pada terminal 1 untuk compile aset frontend.
+9. Jalankan command `php artisan serve` pada terminal 2 untuk mengakses program **Laravel** di localhost browser (http://127.0.0.1:8000/).
+10. Jalankan command `php artisan queue:work --tries=3 --timeout=300` pada terminal 3 untuk AI processing.
